@@ -19,11 +19,14 @@ def load_file(
         token: str = Form(...),
         record: UploadFile = File(...),
         session: Session = Depends(get_session)
-):
-
+) -> dict:
     file_location = f"files/{record.filename}"
-    if not session.query(CustomUser).where(CustomUser.id == id, CustomUser.token == token).count():
-        raise HTTPException(status_code=404, detail='Такого пользователя не существует или у него нет доступа')
+    if not session.query(CustomUser).where(
+            CustomUser.id == id, CustomUser.token == token).count():
+        raise HTTPException(
+            status_code=404,
+            detail='Такого пользователя не существует или у него нет доступа'
+        )
     check_file(record)
     save_in_local_storage(record, file_location)
     dst = convert(record)
@@ -36,5 +39,7 @@ def load_file(
         session.refresh(create_record)
     except Exception:
         session.rollback()
-    url = f'http://{settings.localhost}:{settings.local_port}/record?id={create_record.id}&user={id}'
-    return {'url': url}
+    url = (f'http://'
+           f'{settings.localhost}:{settings.local_port}/'
+           f'record?id={create_record.id}&user={id}')
+    return {'url_for_for_load_file': url}

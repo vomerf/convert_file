@@ -9,8 +9,8 @@ class Settings(BaseSettings):
     postgres_password: str
     db_host: str
     db_port: str
-    localhost: str
-    local_port: str
+    localhost: str = '127.0.0.1'
+    local_port: str = '8000'
 
     @property
     def database_url(self) -> str:

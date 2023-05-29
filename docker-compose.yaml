@@ -8,19 +8,18 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - db
+      - db_convert_file
     env_file:
       - .env
 
-  db:
+  db_convert_file:
     image: postgres:13.2
-    container_name: db_convert_file
     restart: always
     command: -p 5000
     ports:
       - 5000:5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data_convert_file:/var/lib/postgresql/data/
     env_file:
       - .env
 
